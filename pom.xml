@@ -6,63 +6,76 @@
 
     <groupId>com.yll</groupId>
     <artifactId>CvTool</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <hutool.version>5.8.26</hutool.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <logback.version>1.2.12</logback.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
-            <version>5.8.26</version>
+            <version>${hutool.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-crypto</artifactId>
-            <version>5.8.25</version>
+            <version>${hutool.version}</version>
+        </dependency>
+
+        <!-- 日志框架 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.1</version>
-            <scope>compile</scope>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <!-- 测试依赖（改为 test scope + JUnit 5） -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <finalName>CvTool</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.7.1</version>
                 <configuration>
-                    <!--如果不想在打包的后缀加上assembly.xml中设置的id，可以加上下面的配置-->
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <!-- 是否绑定依赖，将外部jar包依赖加入到classPath中 -->
                             <addClasspath>true</addClasspath>
-                            <!-- 依赖前缀，与之前设置的文件夹路径要匹配 -->
                             <classpathPrefix>lib/</classpathPrefix>
-                            <!-- 执行的主程序入口 -->
-                            <mainClass>com.yll.SpecialTool</mainClass>
+                            <mainClass>com.yll.CvToolApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
                 <executions>
                     <execution>
                         <id>make-assembly</id>
-                        <!--绑定的maven操作-->
                         <phase>package</phase>
                         <goals>
-                            <goal>assembly</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>

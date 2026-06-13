@@ -1,43 +1,31 @@
 package com.yll;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
+import com.yll.clipboard.ClipboardService;
 
+/**
+ * 向后兼容的剪贴板工具类（已废弃）。
+ *
+ * @deprecated 请使用 {@link com.yll.clipboard.ClipboardService}
+ */
+@Deprecated
 public class CvUtil {
 
+    private CvUtil() {
+    }
+
     /**
-     * 1. 从剪切板获得文字。
+     * @deprecated 使用 {@link ClipboardService#getText()}
      */
+    @Deprecated
     public static String getSysClipboardText() {
-        String ret = "";
-        Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
-        // 获取剪切板中的内容
-        Transferable clipTf = sysClip.getContents(null);
-
-        if (clipTf != null) {
-            // 检查内容是否是文本类型
-            if (clipTf.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                try {
-                    ret = (String) clipTf.getTransferData(DataFlavor.stringFlavor);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return ret;
+        return ClipboardService.getText();
     }
 
     /**
-     * 2.将字符串复制到剪切板。
+     * @deprecated 使用 {@link ClipboardService#setText(String)}
      */
+    @Deprecated
     public static void setSysClipboardText(String writeMe) {
-        Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
-        Transferable tText = new StringSelection(writeMe);
-        clip.setContents(tText, null);
+        ClipboardService.setText(writeMe);
     }
-
 }
