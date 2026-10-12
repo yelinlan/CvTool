@@ -1,31 +1,48 @@
 package com.yll;
 
-import com.yll.clipboard.ClipboardService;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 
-/**
- * 向后兼容的剪贴板工具类（已废弃）。
- *
- * @deprecated 请使用 {@link com.yll.clipboard.ClipboardService}
- */
-@Deprecated
 public class CvUtil {
 
-    private CvUtil() {
-    }
-
     /**
-     * @deprecated 使用 {@link ClipboardService#getText()}
+     * 从剪切板获取文字。
      */
-    @Deprecated
     public static String getSysClipboardText() {
-        return ClipboardService.getText();
+        Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+        if (sysClip == null) {
+            return "";
+        }
+
+        Transferable clipTf = sysClip.getContents(null);
+        if (clipTf == null || !clipTf.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            return "";
+        }
+
+        try {
+            Object data = clipTf.getTransferData(DataFlavor.stringFlavor);
+            return data == null ? "" : data.toString();
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**
-     * @deprecated 使用 {@link ClipboardService#setText(String)}
+     * 将字符串复制到剪切板。
      */
-    @Deprecated
     public static void setSysClipboardText(String writeMe) {
-        ClipboardService.setText(writeMe);
+        if (writeMe == null) {
+            throw new IllegalArgumentException("剪贴板内容不能为空");
+        }
+
+        Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
+        if (clip == null) {
+            throw new IllegalStateException("当前环境没有可用的系统剪贴板");
+        }
+
+        clip.setContents(new StringSelection(writeMe), null);
     }
 }
